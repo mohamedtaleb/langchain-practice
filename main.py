@@ -2,8 +2,9 @@ from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_community.chat_models import ChatOllama
+#from langchain_community.chat_models import ChatOllama
 import os
+import google.genai as genai
 load_dotenv()
 
 def main():
@@ -25,8 +26,9 @@ Après la victoire de Donald Trump, il est nommé haut conseiller et prend la t�
     summary_prompt_template = PromptTemplate(
         input_variables=["information"], template=summury_template
     )
+    
 
-    llm = ChatOllama(temperature=0, model="llama3.1")
+    llm = ChatGoogleGenerativeAI(temperature=0, model="gemini-2.0-flash-lite")
     chain = summary_prompt_template | llm
     response = chain.invoke(input= {"information": information})
     print(response.content)
