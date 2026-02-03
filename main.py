@@ -3,34 +3,28 @@ from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
 #from langchain_community.chat_models import ChatOllama
+from langchain.agents import create_agent
+from langchain.tools import tool
+from langchain_core.messages import HumanMessage
 import os
 import google.genai as genai
 load_dotenv()
 
-def main():
-    print("Hello from langchain-course!")
-    information = """ Elon Musk, né le 28 juin 1971 à Pretoria (Afrique du Sud), est un entrepreneur, homme d'affaires international, chef d'entreprise, homme politique et milliardaire sud-africain, canadien et américain. Il est considéré comme la personne la plus riche du monde.
-Elon Musk commence sa carrière en affaires comme cofondateur de la société de logiciels Zip2 avec son frère, Kimbal Musk. La start-up est acquise par Compaq pour 307 millions de dollars en 1999. La même année, Musk cofonde la banque en ligne X.com, qui fusionne avec Confinity en 2000 pour former PayPal. eBay rachète PayPal en 2002 pour 1,5 milliard de dollars.
-En 2002, Musk fonde SpaceX, un fabricant aérospatial et une société de services de transport spatial, et en est le président-directeur général. En 2004, il investit 6,5 millions de dollars dans le constructeur de véhicules électriques Tesla, et en devient le PDG en 2008. En 2006, il participe à la création de SolarCity, une société d'énergie solaire qui est ensuite acquise par Tesla et devient Tesla Energy. En 2015, il cofonde et devient coprésident d'OpenAI, une association de recherche promouvant l'intelligence artificielle amicale, qu'il quitte en 2018. En 2016, il fonde The Boring Company, société de construction de tunnels, et Neuralink, société de neurotechnologie. En 2022, il devient le propriétaire de Twitter par un achat à 44 milliards de dollars, qu'il renomme « X » l'année suivante. En 2023, il fonde la société xAI dans le domaine de l'intelligence artificielle.
-En janvier 2021, selon Bloomberg, Elon Musk devient, à 49 ans, l'individu le plus riche du monde avec une fortune estimée à 188,5 milliards de dollars. Au cours du dernier trimestre 2025, elle atteint presque 730 milliards au 31 décembre 2025 à la suite de la revalorisation de ses participations.
-À partir de la fin des années 2010, ses actions et déclarations, dont certaines relèvent de la désinformation et des théories du complot, sont régulièrement médiatisées.
-Lors du premier mandat présidentiel de Donald Trump, Elon Musk devient son conseiller officieux, jusqu'à ce qu'un différend les oppose à propos de l'accord de Paris sur le climat. Alors que ses positions continuent de s'orienter vers l'extrême droite, Musk devient l'un des plus importants soutiens de l'ancien président en vue de sa réélection et s'implique dans sa campagne de 2024, dont il est le deuxième plus gros contributeur financier.
-Après la victoire de Donald Trump, il est nommé haut conseiller et prend la tête du département de l'Efficacité gouvernementale, instance temporaire qui procède à des coupes drastiques dans de nombreux programmes et agences gouvernementaux et licencie des dizaines de milliers de salariés fédéraux. Au bout de quatre mois, il quitte la direction du département et entre dans un violent conflit avec Donald Trump au sujet de sa politique fiscale. Il étend par ailleurs son influence sur les pays européens, apportant publiquement son soutien à des partis d'extrême droite européens.
-"""
-    summury_template = """
-    given the information {information} about a person I want you to create:
-    1. A short summary
-    2. two interesting facts about them
+@tool
+def search(query: str) ->str:
+    """
+    Tool that searches over internet
+    Args:
+        query: The query to search for
+    Returns:
+        The search result
     """
 
-    summary_prompt_template = PromptTemplate(
-        input_variables=["information"], template=summury_template
-    )
-    
-
-    llm = ChatGoogleGenerativeAI(temperature=0, model="gemini-2.0-flash-lite")
-    chain = summary_prompt_template | llm
-    response = chain.invoke(input= {"information": information})
-    print(response.content)
+    print(f"Searching for {query}")
+    return "Tokyo weather is sunny"
+def main():
+    print("Hello from langchain-course!")
+    information = """ Elon Musk, né le 28 juin 1971 à Pretoria (Afrique du Sud)"""
+    print(information)
 if __name__ == "__main__":
     main()
